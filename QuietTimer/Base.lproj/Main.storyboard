@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +10,41 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="QuietTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qq7-ob-Sf2">
+                                <rect key="frame" x="167.33333333333334" y="370" width="55.666666666666657" height="31"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Start"/>
+                                <connections>
+                                    <action selector="btnStartTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jER-XC-Vx3"/>
+                                </connections>
+                            </button>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oct-MC-EUM">
+                                <rect key="frame" x="0.0" y="104" width="390" height="216"/>
+                            </pickerView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Qq7-ob-Sf2" firstAttribute="top" secondItem="oct-MC-EUM" secondAttribute="bottom" constant="50" id="0wu-eV-6MS"/>
+                            <constraint firstItem="Qq7-ob-Sf2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZEa-VF-g50"/>
+                            <constraint firstItem="Qq7-ob-Sf2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l5w-b2-DjO"/>
+                            <constraint firstItem="oct-MC-EUM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="60" id="oFr-Xd-0vC"/>
+                            <constraint firstItem="oct-MC-EUM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pZx-TM-mjW"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="oct-MC-EUM" secondAttribute="trailing" id="uYP-hh-L9m"/>
+                            <constraint firstItem="oct-MC-EUM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vzP-Jn-u15"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="pvTime" destination="oct-MC-EUM" id="L93-BX-euN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-23.076923076923077" y="67.535545023696685"/>
         </scene>
     </scenes>
 </document>
