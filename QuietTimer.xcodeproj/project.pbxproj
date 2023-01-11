@@ -16,6 +16,7 @@
 		AAF4DE03296D3DB7003A0A65 /* QuietTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DE02296D3DB7003A0A65 /* QuietTimerTests.swift */; };
 		AAF4DE0D296D3DB7003A0A65 /* QuietTimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DE0C296D3DB7003A0A65 /* QuietTimerUITests.swift */; };
 		AAF4DE0F296D3DB7003A0A65 /* QuietTimerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DE0E296D3DB7003A0A65 /* QuietTimerUITestsLaunchTests.swift */; };
+		AAF4DE1C296E588C003A0A65 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DE1B296E588C003A0A65 /* Error.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		AAF4DE08296D3DB7003A0A65 /* QuietTimerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuietTimerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF4DE0C296D3DB7003A0A65 /* QuietTimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietTimerUITests.swift; sourceTree = "<group>"; };
 		AAF4DE0E296D3DB7003A0A65 /* QuietTimerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietTimerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AAF4DE1B296E588C003A0A65 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				AAF4DDF4296D3DB6003A0A65 /* Assets.xcassets */,
 				AAF4DDF6296D3DB6003A0A65 /* LaunchScreen.storyboard */,
 				AAF4DDF9296D3DB6003A0A65 /* Info.plist */,
+				AAF4DE1B296E588C003A0A65 /* Error.swift */,
 			);
 			path = QuietTimer;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAF4DE1C296E588C003A0A65 /* Error.swift in Sources */,
 				AAF4DDF0296D3DB3003A0A65 /* ViewController.swift in Sources */,
 				AAF4DDEC296D3DB3003A0A65 /* AppDelegate.swift in Sources */,
 				AAF4DDEE296D3DB3003A0A65 /* SceneDelegate.swift in Sources */,

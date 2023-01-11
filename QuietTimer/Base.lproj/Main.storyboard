@@ -14,33 +14,9 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qq7-ob-Sf2">
-                                <rect key="frame" x="167.33333333333334" y="370" width="55.666666666666657" height="31"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Start"/>
-                                <connections>
-                                    <action selector="btnStartTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jER-XC-Vx3"/>
-                                </connections>
-                            </button>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oct-MC-EUM">
-                                <rect key="frame" x="0.0" y="104" width="390" height="216"/>
-                            </pickerView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Qq7-ob-Sf2" firstAttribute="top" secondItem="oct-MC-EUM" secondAttribute="bottom" constant="50" id="0wu-eV-6MS"/>
-                            <constraint firstItem="Qq7-ob-Sf2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZEa-VF-g50"/>
-                            <constraint firstItem="Qq7-ob-Sf2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l5w-b2-DjO"/>
-                            <constraint firstItem="oct-MC-EUM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="60" id="oFr-Xd-0vC"/>
-                            <constraint firstItem="oct-MC-EUM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pZx-TM-mjW"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="oct-MC-EUM" secondAttribute="trailing" id="uYP-hh-L9m"/>
-                            <constraint firstItem="oct-MC-EUM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vzP-Jn-u15"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="pvTime" destination="oct-MC-EUM" id="L93-BX-euN"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
