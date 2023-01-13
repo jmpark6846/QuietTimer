@@ -12,9 +12,24 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     let TRANSITION_INTERVAL = 0.1
+    let TIMER_INTERVAL = 0.05
     
+    var isAppFirstEnterForeground = true
+    
+    var status: TimerStatus = .READY
     var selectedTime: TimeInterval = 0.0
-    var remainingTime: TimeInterval = 0.0
+    var endTime: TimeInterval = 0.0
+    var remainingTime: TimeInterval {
+        if pausedAt != nil {
+            return endTime - pausedAt!.timeIntervalSinceReferenceDate
+        }
+        
+        let value = endTime - Date.timeIntervalSinceReferenceDate
+        return value > 0 ? value : 0
+    }
+
+    
+    var pausedAt: Date?
     var timer: Timer!
     
     var pvTimeData: [Int] = [0, 0, 0]
@@ -30,54 +45,143 @@ class ViewController: UIViewController {
     override func loadView() {
         super.loadView()
         setupUI()
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil, using: saveBackgroundEnterTime(notification:))
-        NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil, using: calculateCurrentTimeWhenEnterForeground(notification:))
-        
+//        resetUserDefault()
+//        let userDefaults = UserDefaults.standard
+//        let pausedAt = userDefaults.object(forKey: UserDefaultKey.PAUSED_AT) as? Date
+//        let selectedTime = userDefaults.double(forKey: UserDefaultKey.SELECTED_TIME)
+//        let endTime = userDefaults.double(forKey: UserDefaultKey.END_TIME)
+//        let status = TimerStatus.init(rawValue: userDefaults.integer(forKey: UserDefaultKey.STATUS))!
+//
+//        print("vdl ",pausedAt, selectedTime, endTime, status, timer, remainingTime)
+
+        NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil, using: sceneDidEnterBackground(notification:))
+        NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil, using: sceneWillEnterForeground(notification:))
+        NotificationCenter.default.addObserver(forName: UIScene.didDisconnectNotification, object: nil, queue: nil, using: sceneDidDisconnectNotification(notification:))
+
         pvTime.dataSource = self
         pvTime.delegate = self
     }
     
-    func saveBackgroundEnterTime(notification: Notification){
+    func sceneDidEnterBackground(notification: Notification){
+        let userDefaults = UserDefaults.standard
         if timer != nil && timer.isValid {
             timer.invalidate()
             timer = nil
-            UserDefaults.standard.set(Date(), forKey: UserDefaultKey.BACKGROUND_ENTER_TIME.rawValue)
-            UserDefaults.standard.set(remainingTime, forKey: UserDefaultKey.REMAINING_TIME.rawValue)
-            UserDefaults.standard.set(selectedTime, forKey: UserDefaultKey.SELECTED_TIME.rawValue)
         }
+        print("deb ", pausedAt, selectedTime, endTime, status, timer, remainingTime)
+
+        userDefaults.set(pausedAt, forKey: UserDefaultKey.PAUSED_AT)
+        userDefaults.set(status.rawValue, forKey: UserDefaultKey.STATUS)
+        userDefaults.set(endTime, forKey: UserDefaultKey.END_TIME)
+        userDefaults.set(selectedTime, forKey: UserDefaultKey.SELECTED_TIME)
     }
     
-    func calculateCurrentTimeWhenEnterForeground(notification: Notification){
-        guard let backgroundEnterTime = UserDefaults.standard.object(forKey: UserDefaultKey.BACKGROUND_ENTER_TIME.rawValue) as? Date else { return }
-        
-        let remainingTimeUserDefaults = UserDefaults.standard.double(forKey: UserDefaultKey.REMAINING_TIME.rawValue)
-        let selectedTimeUserDefaults = UserDefaults.standard.double(forKey: UserDefaultKey.SELECTED_TIME.rawValue)
-        
-        UserDefaults.standard.set(nil, forKey: UserDefaultKey.BACKGROUND_ENTER_TIME.rawValue)
-        UserDefaults.standard.set(0, forKey: UserDefaultKey.SELECTED_TIME.rawValue)
-        UserDefaults.standard.set(0, forKey: UserDefaultKey.REMAINING_TIME.rawValue)
+    func sceneWillEnterForeground(notification: Notification){
+        let userDefaults = UserDefaults.standard
 
-        let backgroundTimeInterval =  Date().timeIntervalSince(backgroundEnterTime)
-        selectedTime = selectedTimeUserDefaults
-        remainingTime = remainingTimeUserDefaults
-        remainingTime -= backgroundTimeInterval
-        
-        if remainingTime <= 0 {
-            btnStopTapped(btnStop)
-        }else{
-            setupTimerOnUI()
-            UIView.transition(from: pvTime, to: lbTime!, duration: TRANSITION_INTERVAL, options: .showHideTransitionViews)
-            UIView.transition(from: btnStart, to: btnStack, duration: TRANSITION_INTERVAL, options: .showHideTransitionViews)
+        pausedAt = userDefaults.object(forKey: UserDefaultKey.PAUSED_AT) as? Date
+        selectedTime = userDefaults.double(forKey: UserDefaultKey.SELECTED_TIME)
+        endTime = userDefaults.double(forKey: UserDefaultKey.END_TIME)
+        status = TimerStatus.init(rawValue: userDefaults.integer(forKey: UserDefaultKey.STATUS))!
+        print("wef ", pausedAt, selectedTime, endTime, status, timer, remainingTime)
+        switch status {
+        case .READY:
+            // user default에 있는 selectedtime으로 pvtime 초기화
+            let hmsValue = getHMSValue(Int(selectedTime))
+            pvTime.selectRow(hmsValue[0], inComponent: 0, animated: false)
+            pvTime.selectRow(hmsValue[1], inComponent: 1, animated: false)
+            pvTime.selectRow(hmsValue[2], inComponent: 2, animated: false)
+        case .START:
+            if remainingTime > 0 {
+                // start timer
+                timer = Timer.scheduledTimer(timeInterval: TIMER_INTERVAL, target: self, selector: #selector(self.timeUpdate), userInfo: nil, repeats: true)
+                scheduleNotification()
+                
+                // make timer ui
+                if isAppFirstEnterForeground {
+                   setupTimerOnUI()
+                    UIView.transition(from: pvTime, to: lbTime!, duration: TRANSITION_INTERVAL, options: .showHideTransitionViews)
+                    UIView.transition(from: btnStart, to: btnStack, duration: TRANSITION_INTERVAL, options: .showHideTransitionViews)
+                }
+            }else{
+                // stop timer
+                endTime = 0
+                if timer != nil && timer.isValid {
+                    timer.invalidate()
+                    timer = nil
+                }
+                status = .READY
+                removeNotification()
+
+                // make ready ui
+                if isAppFirstEnterForeground {
+                    let hmsValue = getHMSValue(Int(selectedTime))
+                    pvTime.selectRow(hmsValue[0], inComponent: 0, animated: false)
+                    pvTime.selectRow(hmsValue[1], inComponent: 1, animated: false)
+                    pvTime.selectRow(hmsValue[2], inComponent: 2, animated: false)
+                }else{
+                    view.addSubview(pvTime)
+                    pvTime.translatesAutoresizingMaskIntoConstraints = false
+                    pvTime.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+                    pvTime.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+                    UIView.transition(from: lbTime, to: pvTime, duration: TRANSITION_INTERVAL, options: .transitionCrossDissolve, completion: nil)
+                    
+                    view.addSubview(btnStart)
+                    btnStart.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+                    btnStart.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+                    UIView.transition(from: btnStack, to: btnStart, duration: TRANSITION_INTERVAL, options: .transitionCrossDissolve, completion: nil)
+                    
+                    btnResume.removeFromSuperview()
+                    btnStack.addArrangedSubview(btnPause)
+                    
+                }
+            }
             
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timeUpdate), userInfo: nil, repeats: true)
-            scheduleNotification()
+        case .PAUSED:
+            // disconnect 후 다시 들어온 경우(관련 플래그 확인) timer ui로 변경
+            if isAppFirstEnterForeground {
+                // make timer ui
+                
+                pvTime.removeFromSuperview()
+                btnStart.removeFromSuperview()
+                
+                view.addSubview(lbTime)
+                lbTime.text = formattedTimeText(remainingTime)
+                lbTime.translatesAutoresizingMaskIntoConstraints = false
+                lbTime.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+                lbTime.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+                
+                btnStack = getBtnStack()
+                btnStack.addArrangedSubview(btnStop)
+                btnStack.addArrangedSubview(btnResume)
+                view.addSubview(btnStack)
+                btnStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+                btnStack.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+                
+            }
         }
+        
+        isAppFirstEnterForeground = false
+    }
+    
+    func sceneDidDisconnectNotification(notification: Notification){
+        let userDefaults = UserDefaults.standard
+
+        if timer != nil && timer.isValid {
+            timer.invalidate()
+            timer = nil
+        }
+        print("dd ", pausedAt, selectedTime, endTime, status, timer, remainingTime)
+        userDefaults.set(pausedAt, forKey: UserDefaultKey.PAUSED_AT)
+        userDefaults.set(status.rawValue, forKey: UserDefaultKey.STATUS)
+        userDefaults.set(endTime, forKey: UserDefaultKey.END_TIME)
+        userDefaults.set(selectedTime, forKey: UserDefaultKey.SELECTED_TIME)
+        
     }
     
     func setupUI(){
@@ -111,11 +215,9 @@ class ViewController: UIViewController {
         btnPause.addTarget(self, action: #selector(btnPauseTapped(_:)), for: .touchUpInside)
         btnPause.translatesAutoresizingMaskIntoConstraints = false
         
-        btnStack = UIStackView(arrangedSubviews: [btnStop, btnPause])
-        btnStack.axis = .horizontal
-        btnStack.distribution = .fillEqually
-        btnStack.spacing = 5.0
-        btnStack.translatesAutoresizingMaskIntoConstraints = false
+        btnStack = getBtnStack()
+        btnStack.addArrangedSubview(btnStop)
+        btnStack.addArrangedSubview(btnPause)
         
         btnResume = UIButton()
         btnResume.setTitle("Resume", for: .normal)
@@ -123,25 +225,15 @@ class ViewController: UIViewController {
         btnResume.addTarget(self, action: #selector(btnResumeTapped(_:)), for: .touchUpInside)
     }
     
-    
-    @objc func btnPauseTapped(_ sender: UIButton){
-        timer.invalidate()
-        timer = nil
-        removeNotification()
-        
-        btnPause.removeFromSuperview()
-        btnStack.addArrangedSubview(btnResume)
+    func getBtnStack() -> UIStackView {
+        let btnStack = UIStackView()
+        btnStack.axis = .horizontal
+        btnStack.distribution = .fillEqually
+        btnStack.spacing = 5.0
+        btnStack.translatesAutoresizingMaskIntoConstraints = false
+        return btnStack
     }
-    
-    @objc func btnResumeTapped(_ sender: UIButton) {
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timeUpdate), userInfo: nil, repeats: true)
-        
-        scheduleNotification()
-        
-        btnResume.removeFromSuperview()
-        btnStack.addArrangedSubview(btnPause)
-    }
-    
+
     func setupTimerOnUI(){
         view.addSubview(lbTime)
         lbTime.translatesAutoresizingMaskIntoConstraints = false
@@ -155,19 +247,23 @@ class ViewController: UIViewController {
     }
     
     @objc func btnStartTapped(_ sender: UIButton) {
-        remainingTime = selectedTime
-        
+        endTime = Date.timeIntervalSinceReferenceDate + selectedTime
+        status = .START
         setupTimerOnUI()
         UIView.transition(from: pvTime, to: lbTime!, duration: TRANSITION_INTERVAL, options: .transitionCrossDissolve)
         UIView.transition(from: btnStart, to: btnStack, duration: TRANSITION_INTERVAL, options: .transitionCrossDissolve)
         
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timeUpdate), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: TIMER_INTERVAL, target: self, selector: #selector(self.timeUpdate), userInfo: nil, repeats: true)
         
         scheduleNotification()
         
     }
     
     @objc func btnStopTapped(_ sender: UIButton){
+        status = .READY
+        endTime = 0
+        pausedAt = nil
+        
         if timer != nil && timer.isValid {
             timer.invalidate()
             timer = nil
@@ -190,9 +286,36 @@ class ViewController: UIViewController {
         removeNotification()
     }
     
+    @objc func btnPauseTapped(_ sender: UIButton){
+        status = .PAUSED
+        pausedAt = Date()
+        UserDefaults.standard.set(pausedAt, forKey: UserDefaultKey.PAUSED_AT)
+        
+        timer.invalidate()
+        timer = nil
+        removeNotification()
+        
+        btnPause.removeFromSuperview()
+        btnStack.addArrangedSubview(btnResume)
+    }
+    
+    @objc func btnResumeTapped(_ sender: UIButton) {
+        if pausedAt == nil {
+            return
+        }
+    
+        status = .START
+        endTime += Date.timeIntervalSinceReferenceDate - pausedAt!.timeIntervalSinceReferenceDate
+        pausedAt = nil
+        timer = Timer.scheduledTimer(timeInterval: TIMER_INTERVAL, target: self, selector: #selector(timeUpdate), userInfo: nil, repeats: true)
+        
+        scheduleNotification()
+        
+        btnResume.removeFromSuperview()
+        btnStack.addArrangedSubview(btnPause)
+    }
     
     @objc func timeUpdate(){
-        remainingTime -= 1
         guard let lbTime = lbTime else { return }
         lbTime.text = formattedTimeText(remainingTime)
         
@@ -221,16 +344,29 @@ class ViewController: UIViewController {
     }
     
     func formattedTimeText(_ timeAsDouble: TimeInterval) -> String {
-        let timeInterval = Int(timeAsDouble)
+        let timeInterval = Int(timeAsDouble.rounded())
+        let hmsValue = getHMSValue(timeInterval)
+        return String(format: "%02d:%02d:%02d", arguments: [hmsValue[0], hmsValue[1], hmsValue[2]])
+    }
+    
+    func getHMSValue(_ timeInterval: Int) -> [Int] {
         let hour = timeInterval / 3600
         let minute = timeInterval % 3600 / 60
         let second = timeInterval % 3600 % 60
-        return String(format: "%02d:%02d:%02d", arguments: [hour, minute, second])
+        return [hour, minute, second]
     }
     
+    func resetUserDefault(){
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(nil, forKey: UserDefaultKey.PAUSED_AT)
+        userDefaults.set(0, forKey: UserDefaultKey.STATUS)
+        userDefaults.set(0, forKey: UserDefaultKey.END_TIME)
+        userDefaults.set(0, forKey: UserDefaultKey.SELECTED_TIME)
+    }
 }
 
 extension ViewController {
+    
     func scheduleNotification(){
         let content = UNMutableNotificationContent()
         content.title = "Quiet Timer"
@@ -251,6 +387,8 @@ extension ViewController {
 }
 
 extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 3

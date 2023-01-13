@@ -7,18 +7,30 @@
 
 import Foundation
 
-class JMTimer {
+class CountDownTimer {
+    let TIMER_INTERVAL = 0.05
+    var status: TimerStatus = .READY
     var selectedTime: TimeInterval = 0.0
-    var remainingTime: TimeInterval = 0.0
-    var timer: Timer!
+    var endTime: TimeInterval = 0.0
+    var remainingTime: TimeInterval {
+        if pausedAt != nil {
+            return endTime - pausedAt!.timeIntervalSinceReferenceDate
+        }
+        
+        if endTime == 0 {
+            return 0
+        }
+        
+        return endTime - Date.timeIntervalSinceReferenceDate
+    }
+    var pausedAt: Date?
+    var timer: Timer? // TODO
     var updateHandler:  (() -> Void)?
     
-    
     @objc func timeUpdate(){
-        print("fired")
-        remainingTime -= 1
+        
         if remainingTime <= 0 {
-            timer.invalidate()
+            timer?.invalidate()
             timer = nil
         }
         
@@ -28,35 +40,48 @@ class JMTimer {
     }
     
     func start(){
-        
         if selectedTime <= 0 {
             return
         }
         
-        if timer == nil {
-            remainingTime = selectedTime
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeUpdate), userInfo: nil, repeats: true)
+        if timer != nil {
+            fatalError()
         }
+        status = .START
+        endTime = Date.timeIntervalSinceReferenceDate + selectedTime
+        setTimer()
+        
     }
     
     func stop(){
-        if timer != nil && timer.isValid {
-            timer.invalidate()
-            timer = nil
-            remainingTime = 0
+        if timer == nil {
+            fatalError()
         }
+        status = .READY
+        emptyTimer()
+        endTime = 0
     }
     
     func pause(){
-        if timer != nil && timer.isValid {
-            timer.invalidate()
-            timer = nil
-        }
+        status = .PAUSED
+        emptyTimer()
+        pausedAt = Date()
+        
     }
     
     func resume(){
-        if timer == nil {
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeUpdate), userInfo: nil, repeats: true)
-        }
+        status = .START
+        endTime += Date.timeIntervalSinceReferenceDate - pausedAt!.timeIntervalSinceReferenceDate
+        pausedAt = nil
+        setTimer()
+    }
+    
+    func emptyTimer(){
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    func setTimer(){
+        timer = Timer.scheduledTimer(timeInterval: TIMER_INTERVAL, target: self, selector: #selector(timeUpdate), userInfo: nil, repeats: true)
     }
 }
