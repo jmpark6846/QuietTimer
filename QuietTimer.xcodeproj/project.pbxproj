@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AAC4A915296FA07200823B24 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC4A914296FA07200823B24 /* Timer.swift */; };
 		AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */; };
+		AAEF4B1F2970E1C20051BDDC /* empty_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */; };
 		AAF39AD2296E817B00C33FBE /* Vibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF39AD1296E817B00C33FBE /* Vibration.swift */; };
 		AAF4DDEC296D3DB3003A0A65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DDEB296D3DB3003A0A65 /* AppDelegate.swift */; };
 		AAF4DDEE296D3DB3003A0A65 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DDED296D3DB3003A0A65 /* SceneDelegate.swift */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		AAC4A914296FA07200823B24 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKey.swift; sourceTree = "<group>"; };
+		AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = empty_sound.mp3; sourceTree = "<group>"; };
 		AAF39AD1296E817B00C33FBE /* Vibration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vibration.swift; sourceTree = "<group>"; };
 		AAF4DDE8296D3DB3003A0A65 /* QuietTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuietTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF4DDEB296D3DB3003A0A65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				AAF4DE1B296E588C003A0A65 /* Error.swift */,
 				AAF39AD1296E817B00C33FBE /* Vibration.swift */,
 				AAC4A914296FA07200823B24 /* Timer.swift */,
+				AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */,
 				AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */,
 			);
 			path = QuietTimer;
@@ -246,6 +249,7 @@
 				AAF4DDF8296D3DB6003A0A65 /* LaunchScreen.storyboard in Resources */,
 				AAF4DDF5296D3DB6003A0A65 /* Assets.xcassets in Resources */,
 				AAF4DDF3296D3DB3003A0A65 /* Main.storyboard in Resources */,
+				AAEF4B1F2970E1C20051BDDC /* empty_sound.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

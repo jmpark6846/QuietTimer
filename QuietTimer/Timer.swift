@@ -15,6 +15,7 @@ class JMTimer {
     
     
     @objc func timeUpdate(){
+        print("fired")
         remainingTime -= 1
         if remainingTime <= 0 {
             timer.invalidate()
@@ -27,6 +28,7 @@ class JMTimer {
     }
     
     func start(){
+        
         if selectedTime <= 0 {
             return
         }

@@ -220,7 +220,6 @@ class ViewController: UIViewController {
         }
     }
     
-    
     func formattedTimeText(_ timeAsDouble: TimeInterval) -> String {
         let timeInterval = Int(timeAsDouble)
         let hour = timeInterval / 3600
@@ -236,9 +235,7 @@ extension ViewController {
         let content = UNMutableNotificationContent()
         content.title = "Quiet Timer"
         content.body = "Time's up!"
-        
-        // TODO: 소리 안나고 진동만 울리도록 변경
-        content.sound = .default
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "empty_sound.mp3"))
 
         for i in 0...30 {
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: remainingTime + Double(i), repeats: false)
@@ -279,3 +276,4 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
 }
+
