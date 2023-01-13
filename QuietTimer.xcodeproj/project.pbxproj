@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AAC4A915296FA07200823B24 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC4A914296FA07200823B24 /* Timer.swift */; };
+		AAC4A915296FA07200823B24 /* CountDownTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC4A914296FA07200823B24 /* CountDownTimer.swift */; };
 		AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */; };
 		AAEF4B1F2970E1C20051BDDC /* empty_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */; };
 		AAEF4B212971096D0051BDDC /* TimerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF4B202971096D0051BDDC /* TimerStatus.swift */; };
@@ -42,7 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AAC4A914296FA07200823B24 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		AAC4A914296FA07200823B24 /* CountDownTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownTimer.swift; sourceTree = "<group>"; };
 		AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKey.swift; sourceTree = "<group>"; };
 		AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = empty_sound.mp3; sourceTree = "<group>"; };
 		AAEF4B202971096D0051BDDC /* TimerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerStatus.swift; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 				AAF4DDF9296D3DB6003A0A65 /* Info.plist */,
 				AAF4DE1B296E588C003A0A65 /* Error.swift */,
 				AAF39AD1296E817B00C33FBE /* Vibration.swift */,
-				AAC4A914296FA07200823B24 /* Timer.swift */,
+				AAC4A914296FA07200823B24 /* CountDownTimer.swift */,
 				AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */,
 				AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */,
 				AAEF4B202971096D0051BDDC /* TimerStatus.swift */,
@@ -282,7 +282,7 @@
 				AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */,
 				AAF4DDF0296D3DB3003A0A65 /* ViewController.swift in Sources */,
 				AAF39AD2296E817B00C33FBE /* Vibration.swift in Sources */,
-				AAC4A915296FA07200823B24 /* Timer.swift in Sources */,
+				AAC4A915296FA07200823B24 /* CountDownTimer.swift in Sources */,
 				AAF4DDEC296D3DB3003A0A65 /* AppDelegate.swift in Sources */,
 				AAF4DDEE296D3DB3003A0A65 /* SceneDelegate.swift in Sources */,
 			);

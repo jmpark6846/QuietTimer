@@ -24,14 +24,13 @@ class CountDownTimer {
         return endTime - Date.timeIntervalSinceReferenceDate
     }
     var pausedAt: Date?
-    var timer: Timer? // TODO
+    var timer: Timer?
     var updateHandler:  (() -> Void)?
     
     @objc func timeUpdate(){
         
         if remainingTime <= 0 {
-            timer?.invalidate()
-            timer = nil
+            emptyTimer()
         }
         
         if updateHandler != nil {
@@ -54,12 +53,10 @@ class CountDownTimer {
     }
     
     func stop(){
-        if timer == nil {
-            fatalError()
-        }
         status = .READY
         emptyTimer()
         endTime = 0
+        pausedAt = nil
     }
     
     func pause(){
