@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AAC4A915296FA07200823B24 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC4A914296FA07200823B24 /* Timer.swift */; };
+		AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */; };
+		AAF39AD2296E817B00C33FBE /* Vibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF39AD1296E817B00C33FBE /* Vibration.swift */; };
 		AAF4DDEC296D3DB3003A0A65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DDEB296D3DB3003A0A65 /* AppDelegate.swift */; };
 		AAF4DDEE296D3DB3003A0A65 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DDED296D3DB3003A0A65 /* SceneDelegate.swift */; };
 		AAF4DDF0296D3DB3003A0A65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF4DDEF296D3DB3003A0A65 /* ViewController.swift */; };
@@ -37,6 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AAC4A914296FA07200823B24 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKey.swift; sourceTree = "<group>"; };
+		AAF39AD1296E817B00C33FBE /* Vibration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vibration.swift; sourceTree = "<group>"; };
 		AAF4DDE8296D3DB3003A0A65 /* QuietTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuietTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF4DDEB296D3DB3003A0A65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAF4DDED296D3DB3003A0A65 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +115,9 @@
 				AAF4DDF6296D3DB6003A0A65 /* LaunchScreen.storyboard */,
 				AAF4DDF9296D3DB6003A0A65 /* Info.plist */,
 				AAF4DE1B296E588C003A0A65 /* Error.swift */,
+				AAF39AD1296E817B00C33FBE /* Vibration.swift */,
+				AAC4A914296FA07200823B24 /* Timer.swift */,
+				AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */,
 			);
 			path = QuietTimer;
 			sourceTree = "<group>";
@@ -262,7 +271,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAF4DE1C296E588C003A0A65 /* Error.swift in Sources */,
+				AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */,
 				AAF4DDF0296D3DB3003A0A65 /* ViewController.swift in Sources */,
+				AAF39AD2296E817B00C33FBE /* Vibration.swift in Sources */,
+				AAC4A915296FA07200823B24 /* Timer.swift in Sources */,
 				AAF4DDEC296D3DB3003A0A65 /* AppDelegate.swift in Sources */,
 				AAF4DDEE296D3DB3003A0A65 /* SceneDelegate.swift in Sources */,
 			);
@@ -429,6 +441,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -443,6 +456,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8Z45C88L3G;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QuietTimer/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -470,6 +484,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8Z45C88L3G;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QuietTimer/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
