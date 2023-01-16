@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA8CA7E12972446A0006F258 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8CA7E02972446A0006F258 /* RoundButton.swift */; };
+		AA8CA7E32972499F0006F258 /* TImePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8CA7E22972499F0006F258 /* TImePickerView.swift */; };
 		AAC4A915296FA07200823B24 /* CountDownTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC4A914296FA07200823B24 /* CountDownTimer.swift */; };
 		AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */; };
 		AAEF4B1F2970E1C20051BDDC /* empty_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA8CA7E02972446A0006F258 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
+		AA8CA7E22972499F0006F258 /* TImePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TImePickerView.swift; sourceTree = "<group>"; };
 		AAC4A914296FA07200823B24 /* CountDownTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownTimer.swift; sourceTree = "<group>"; };
 		AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKey.swift; sourceTree = "<group>"; };
 		AAEF4B1E2970E1C20051BDDC /* empty_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = empty_sound.mp3; sourceTree = "<group>"; };
@@ -88,6 +92,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA8CA7DF297244420006F258 /* component */ = {
+			isa = PBXGroup;
+			children = (
+				AA8CA7E02972446A0006F258 /* RoundButton.swift */,
+				AA8CA7E22972499F0006F258 /* TImePickerView.swift */,
+			);
+			path = component;
+			sourceTree = "<group>";
+		};
 		AAF4DDDF296D3DB3003A0A65 = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				AAF4DDEB296D3DB3003A0A65 /* AppDelegate.swift */,
+				AA8CA7DF297244420006F258 /* component */,
 				AAF4DDED296D3DB3003A0A65 /* SceneDelegate.swift */,
 				AAF4DDEF296D3DB3003A0A65 /* ViewController.swift */,
 				AAF4DDF1296D3DB3003A0A65 /* Main.storyboard */,
@@ -277,6 +291,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA8CA7E12972446A0006F258 /* RoundButton.swift in Sources */,
+				AA8CA7E32972499F0006F258 /* TImePickerView.swift in Sources */,
 				AAF4DE1C296E588C003A0A65 /* Error.swift in Sources */,
 				AAEF4B212971096D0051BDDC /* TimerStatus.swift in Sources */,
 				AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */,
