@@ -31,6 +31,7 @@ class CountDownTimer {
         
         if remainingTime <= 0 {
             emptyTimer()
+            status = .READY
         }
         
         if updateHandler != nil {
@@ -39,6 +40,10 @@ class CountDownTimer {
     }
     
     func start(){
+        if status != .READY {
+            fatalError("준비상태에서만 시작할 수 있습니다.")
+        }
+        
         if selectedTime <= 0 {
             return
         }
@@ -53,6 +58,9 @@ class CountDownTimer {
     }
     
     func stop(){
+        if status == .READY {
+            fatalError("이미 준비(정지된) 상태입니다.")
+        }
         status = .READY
         emptyTimer()
         endTime = 0
@@ -60,6 +68,9 @@ class CountDownTimer {
     }
     
     func pause(){
+        if status == .PAUSED && pausedAt != nil {
+            fatalError("이미 일시정지 상태입니다")
+        }
         status = .PAUSED
         emptyTimer()
         pausedAt = Date()
@@ -67,6 +78,9 @@ class CountDownTimer {
     }
     
     func resume(){
+        if status != .PAUSED && pausedAt != nil  {
+            fatalError("일시정지된 상태에서만 resume 할 수 있습니다.")
+        }
         status = .START
         endTime += Date.timeIntervalSinceReferenceDate - pausedAt!.timeIntervalSinceReferenceDate
         pausedAt = nil
