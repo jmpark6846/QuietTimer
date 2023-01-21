@@ -14,7 +14,6 @@ class CircularPrograssBar: UIView {
     var lastStrokeStart:CGFloat? = 0.0
     var trackLayer = CAShapeLayer()
     var progressBarLayer = CAShapeLayer()
-    var animation: CAAnimation?
     
     var radius: CGFloat = 50.0
     var lineWidth: CGFloat = 5 {
@@ -58,19 +57,19 @@ class CircularPrograssBar: UIView {
         progressBarLayer.lineJoin = .round
         layer.addSublayer(progressBarLayer)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIScene.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackgroundOrDisconnected), name: UIScene.didEnterBackgroundNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIScene.willEnterForegroundNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didDisconnect), name: UIScene.didDisconnectNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackgroundOrDisconnected), name: UIScene.didDisconnectNotification, object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc func didDisconnect() {
-        // 씬 종료 되었을때: stroke start 정보를 UserDefaults에 저장
+    @objc func didEnterBackgroundOrDisconnected(){
+        // 백그라운드로 진입: 현재 에니메이션 실행 중이면, 에니메이션을 변수에 저장
         guard let pointWhenDisconnected = getPresentationStrokeStart() else { return }
         let durationLeft = duration * (1 - Double(pointWhenDisconnected))
         
@@ -79,34 +78,22 @@ class CircularPrograssBar: UIView {
         UserDefaults.standard.set(Date(), forKey: "disconnectedAt")
     }
     
-    @objc func didEnterBackground(){
-        // 백그라운드로 진입: 현재 에니메이션 실행 중이면, 에니메이션을 변수에 저장
-        animation = progressBarLayer.animation(forKey: STROKE_START)
-    }
-    
     @objc func willEnterForeground(){
-        // 백그라운드 -> 포어그라운드 진입: 변수에 저장한 에니메이션 시작
-        if let animation = animation {
-            progressBarLayer.add(animation, forKey: STROKE_START)
-        }
-        // 씬 종료 -> 다시 실행: UserDefaults에 정보 불러와서 다시 들어오기전 시간만큼 더해준 다음 에니메이션 시작
-        else {
-            let duration = UserDefaults.standard.double(forKey: "duration")
-            let durationLeft = UserDefaults.standard.double(forKey: "durationLeft")
-            guard let disconnectedAt = UserDefaults.standard.object(forKey: "disconnectedAt") as? Date else { return }
+        // 백그라운드 -> 포어그라운드 진입, 씬 종료 -> 다시 실행: UserDefaults에 정보 불러와서 다시 들어오기전 시간만큼 더해준 다음 에니메이션 시작
+        let duration = UserDefaults.standard.double(forKey: "duration")
+        let durationLeft = UserDefaults.standard.double(forKey: "durationLeft")
+        guard let disconnectedAt = UserDefaults.standard.object(forKey: "disconnectedAt") as? Date else { return }
 
-            UserDefaults.standard.set(0, forKey: "duration")
-            UserDefaults.standard.set(0, forKey: "durationLeft")
-            UserDefaults.standard.set(nil, forKey: "disconnectedAt")
-            
-            let timeIntervalSinceDisconnected = Date.timeIntervalSinceReferenceDate - disconnectedAt.timeIntervalSinceReferenceDate
-            let remainingTime = durationLeft - timeIntervalSinceDisconnected
-            let pointToRestart = CGFloat(1 - remainingTime / duration)
+        UserDefaults.standard.set(0, forKey: "duration")
+        UserDefaults.standard.set(0, forKey: "durationLeft")
+        UserDefaults.standard.set(nil, forKey: "disconnectedAt")
+        
+        let timeIntervalSinceDisconnected = Date.timeIntervalSinceReferenceDate - disconnectedAt.timeIntervalSinceReferenceDate
+        let remainingTime = durationLeft - timeIntervalSinceDisconnected
+        let pointToRestart = CGFloat(1 - remainingTime / duration)
 
-            if  remainingTime > 0 {
-                start(duration: remainingTime, from: pointToRestart)
-            }
-            
+        if  remainingTime > 0 {
+            start(duration: remainingTime, from: pointToRestart)
         }
     }
     

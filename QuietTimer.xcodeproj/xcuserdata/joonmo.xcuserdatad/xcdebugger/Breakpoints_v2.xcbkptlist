@@ -14,8 +14,8 @@
             filePath = "QuietTimer/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "439"
-            endingLineNumber = "439"
+            startingLineNumber = "433"
+            endingLineNumber = "433"
             landmarkName = "setLabelForComponent(labels:font:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "QuietTimer/component/CircularProgressBar.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "getPresentationStrokeStart()"
             landmarkType = "7">
          </BreakpointContent>

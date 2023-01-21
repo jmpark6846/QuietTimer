@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AA8CA7E12972446A0006F258 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8CA7E02972446A0006F258 /* RoundButton.swift */; };
-		AA8CA7E32972499F0006F258 /* TImePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8CA7E22972499F0006F258 /* TImePickerView.swift */; };
 		AAA9EABB2977D075009BFF3A /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA9EABA2977D075009BFF3A /* CircularProgressBar.swift */; };
 		AAC4A915296FA07200823B24 /* CountDownTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC4A914296FA07200823B24 /* CountDownTimer.swift */; };
 		AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */; };
@@ -46,7 +45,6 @@
 
 /* Begin PBXFileReference section */
 		AA8CA7E02972446A0006F258 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
-		AA8CA7E22972499F0006F258 /* TImePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TImePickerView.swift; sourceTree = "<group>"; };
 		AAA9EABA2977D075009BFF3A /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 		AAC4A914296FA07200823B24 /* CountDownTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownTimer.swift; sourceTree = "<group>"; };
 		AAEF4B1C2970324E0051BDDC /* UserDefaultKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKey.swift; sourceTree = "<group>"; };
@@ -98,7 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				AA8CA7E02972446A0006F258 /* RoundButton.swift */,
-				AA8CA7E22972499F0006F258 /* TImePickerView.swift */,
 				AAA9EABA2977D075009BFF3A /* CircularProgressBar.swift */,
 			);
 			path = component;
@@ -311,7 +308,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA8CA7E12972446A0006F258 /* RoundButton.swift in Sources */,
-				AA8CA7E32972499F0006F258 /* TImePickerView.swift in Sources */,
 				AAF4DE1C296E588C003A0A65 /* Error.swift in Sources */,
 				AAEF4B212971096D0051BDDC /* TimerStatus.swift in Sources */,
 				AAEF4B1D2970324E0051BDDC /* UserDefaultKey.swift in Sources */,

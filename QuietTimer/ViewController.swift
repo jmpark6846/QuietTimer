@@ -49,7 +49,6 @@ class ViewController: UIViewController {
         setupUI()
 //        resetUserDefaultData()
         // TODO: 타이머 실행 중에 다시 빌드하면 상태 저장 안된 상태로 종료되고 새 빌드로 시작(앱 터미네이트 시점인가?)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIScene.willEnterForegroundNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(saveDataToUserDefaults), name: UIScene.didEnterBackgroundNotification, object: nil)
@@ -149,7 +148,6 @@ class ViewController: UIViewController {
         btnStart.translatesAutoresizingMaskIntoConstraints = false
         btnStart.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         btnStart.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
-
         
         btnStop = RoundButton()
         view.addSubview(btnStop)
@@ -163,7 +161,6 @@ class ViewController: UIViewController {
         btnStop.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 50).isActive = true
         btnStop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
 
-        
         btnPause = RoundButton()
         view.addSubview(btnPause)
         btnPause.heightAnchor.constraint(equalToConstant: 100).isActive = true
@@ -176,7 +173,6 @@ class ViewController: UIViewController {
         btnPause.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -50).isActive = true
         btnPause.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
 
-        
         btnResume = RoundButton()
         view.addSubview(btnResume)
         btnResume.heightAnchor.constraint(equalToConstant: 100).isActive = true
@@ -202,7 +198,6 @@ class ViewController: UIViewController {
         progressBar.heightAnchor.constraint(equalTo: progressBar.widthAnchor).isActive = true
         progressBar.translatesAutoresizingMaskIntoConstraints = false
         
-        
         lbGuideText = UILabel()
         lbGuideText.text = "계속 집중하세요"
         lbGuideText.textColor = UIColor(named: "fontColor")
@@ -211,14 +206,12 @@ class ViewController: UIViewController {
         view.addSubview(lbGuideText)
         lbGuideText.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        
         lbTime = UILabel()
         lbTime.font = UIFont.systemFont(ofSize: 30.0)
         lbTime.textColor = UIColor(named: "fontColor")
         lbTime.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(lbTime)
         lbTime.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
         
         // 최초 UI 세팅
         setupTimeSelectionUI()
@@ -268,8 +261,12 @@ class ViewController: UIViewController {
         setupTimerUI()
         progressBar.start(duration: timer.remainingTime)
 
+        
         // TODO: Transition
-//        UIView.transition(from: pvTime, to: lbGuideText!, duration: TRANSITION_INTERVAL, options: .transitionCrossDissolve)
+//        UIView.transition(with: pvTime, duration: 0.1, options: .transitionCrossDissolve) {
+//            self.pvTime.alpha = 0
+//        } completion: {_ in }
+
         scheduleNotification()
     }
     
@@ -300,9 +297,6 @@ class ViewController: UIViewController {
         progressBar.stop()
         
         setupTimeSelectionUI()
-        
-//        UIView.transition(from: lbGuideText, to: pvTime, duration: TRANSITION_INTERVAL, options: .transitionCrossDissolve, completion: nil)
-        
         removeNotification()
     }
     

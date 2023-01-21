@@ -51,6 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
 
-
+    func applicationWillTerminate(_ application: UIApplication) {
+        print("applicationWillTerminate")
+    }
 }
 
