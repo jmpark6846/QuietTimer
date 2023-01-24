@@ -15,6 +15,9 @@ class ViewController: UIViewController {
     var timer = CountDownTimer()
     var isFirstActivationAfterAppLaunch = true
     
+    var timeSelectionView: UIView!
+    var timerView: UIView!
+    
     var lbTime: UILabel!
     var lbGuideText: UILabel!
     var pvTime: UIPickerView!
@@ -26,23 +29,6 @@ class ViewController: UIViewController {
     var progressBar = CircularPrograssBar()
     var progressBarStrokeStart: CGFloat = 0.0
     
-    override func loadView() {
-        super.loadView()
-        
-    }
-    override func viewDidLayoutSubviews() {
-        setupPickerViewLabel()
-        lbGuideText.bottomAnchor.constraint(equalTo: progressBar.topAnchor, constant: progressBar.bounds.height / 2 - 15).isActive = true
-        lbTime.topAnchor.constraint(equalTo: progressBar.topAnchor, constant: progressBar.bounds.height / 2 + 15).isActive = true
-    }
-
-    func setupPickerViewLabel(){
-        var labels = [Int:String]()
-        labels[0] = "시"
-        labels[1] = "분"
-        labels[2] = "초"
-        pvTime.setLabelForComponent(labels: labels, font: UIFont.systemFont(ofSize: 24))
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,17 +45,22 @@ class ViewController: UIViewController {
         pvTime.dataSource = self
         pvTime.delegate = self
     }
-
-    @objc func saveDataToUserDefaults(){
-        let strokeStart: CGFloat = progressBar.getPresentationStrokeStart() ?? 0
-        timer.emptyTimer()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.setupPickerViewLabel()
+            self.lbGuideText.bottomAnchor.constraint(equalTo: self.progressBar.topAnchor, constant: self.progressBar.bounds.height / 2 - 15).isActive = true
+            self.lbTime.topAnchor.constraint(equalTo: self.progressBar.topAnchor, constant: self.progressBar.bounds.height / 2 + 15).isActive = true
+        }
         
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(timer.pausedAt, forKey: UserDefaultKey.PAUSED_AT)
-        userDefaults.set(timer.status.rawValue, forKey: UserDefaultKey.STATUS)
-        userDefaults.set(timer.endTime, forKey: UserDefaultKey.END_TIME)
-        userDefaults.set(timer.selectedTime, forKey: UserDefaultKey.SELECTED_TIME)
-        userDefaults.set(strokeStart, forKey: UserDefaultKey.STROKE_START)
+    }
+
+    func setupPickerViewLabel(){
+        var labels = [Int:String]()
+        labels[0] = "시"
+        labels[1] = "분"
+        labels[2] = "초"
+        pvTime.setLabelForComponent(labels: labels, font: UIFont.systemFont(ofSize: 24))
     }
     
     @objc func willEnterForeground(){
@@ -96,7 +87,10 @@ class ViewController: UIViewController {
             
                 // make timer ui
                 if isFirstActivationAfterAppLaunch {
-                    setupTimerUI()
+                    DispatchQueue.main.async {
+                        self.setupTimerUI()
+                    }
+                    
                 }
                 
             }else{
@@ -106,8 +100,9 @@ class ViewController: UIViewController {
                 
                 // make selection ui
                 if !isFirstActivationAfterAppLaunch {
-                    setupTimeSelectionUI()
-//                    progressBar.stop()
+                    DispatchQueue.main.async {
+                        self.setupTimeSelectionUI()
+                    }
                 }
             }
         }
@@ -115,9 +110,11 @@ class ViewController: UIViewController {
             // disconnect 후 다시 들어온 경우(관련 플래그 확인) timer ui로 변경
             if isFirstActivationAfterAppLaunch {
                 // make timer ui
-                setupTimerUI()
-                btnResume.isHidden = false
-                btnPause.isHidden = true
+                DispatchQueue.main.async {
+                    self.setupTimerUI()
+                    self.btnResume.isHidden = false
+                    self.btnPause.isHidden = true
+                }
             }
         }
 
@@ -126,19 +123,37 @@ class ViewController: UIViewController {
 
     func setupUI(){
         view.backgroundColor = UIColor(named: "backgroundColor")
+        timeSelectionView = UIView()
+        view.addSubview(timeSelectionView)
+        timeSelectionView.translatesAutoresizingMaskIntoConstraints = false
+        timeSelectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        timeSelectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        timeSelectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        timeSelectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
+        timerView = UIView()
+        view.addSubview(timerView)
+        timerView.translatesAutoresizingMaskIntoConstraints = false
+        timerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        timerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        timerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        timerView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        timerView.alpha = 0
+        timerView.isHidden = true
+        
         
         pvTime = UIPickerView()
-        pvTime.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(pvTime)
-        pvTime.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
-//        pvTime.widthAnchor.constraint(equalToConstant: 280).isActive = true
-        pvTime.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        pvTime.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
-        pvTime.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -15).isActive = true
-
         btnStart = RoundButton()
-        view.addSubview(btnStart)
+        
+        timeSelectionView.addSubview(pvTime)
+        timeSelectionView.addSubview(btnStart)
+        
+        pvTime.translatesAutoresizingMaskIntoConstraints = false
+        pvTime.topAnchor.constraint(equalTo: timeSelectionView.topAnchor, constant: 70).isActive = true
+        pvTime.centerXAnchor.constraint(equalTo: timeSelectionView.centerXAnchor).isActive = true
+        pvTime.leftAnchor.constraint(equalTo: timeSelectionView.leftAnchor, constant: 15).isActive = true
+        pvTime.rightAnchor.constraint(equalTo: timeSelectionView.rightAnchor, constant: -15).isActive = true
+        
         btnStart.heightAnchor.constraint(equalToConstant: 120).isActive = true
         btnStart.widthAnchor.constraint(equalToConstant: 120).isActive = true
         btnStart.setTitle("시작", for: .normal)
@@ -146,11 +161,12 @@ class ViewController: UIViewController {
         btnStart.backgroundColor = UIColor(named: "fontColor")
         btnStart.addTarget(self, action: #selector(btnStartTapped(_:)), for: .touchUpInside)
         btnStart.translatesAutoresizingMaskIntoConstraints = false
-        btnStart.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        btnStart.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
+        btnStart.centerXAnchor.constraint(equalTo: timeSelectionView.centerXAnchor).isActive = true
+        btnStart.bottomAnchor.constraint(equalTo: timeSelectionView.bottomAnchor, constant: -150).isActive = true
+        
         
         btnStop = RoundButton()
-        view.addSubview(btnStop)
+        timerView.addSubview(btnStop)
         btnStop.heightAnchor.constraint(equalToConstant: 100).isActive = true
         btnStop.widthAnchor.constraint(equalToConstant: 100).isActive = true
         btnStop.setTitle("종료", for: .normal)
@@ -158,11 +174,11 @@ class ViewController: UIViewController {
         btnStop.setTitleColor(UIColor(named: "backgroundColor"), for: .normal)
         btnStop.addTarget(self, action: #selector(btnStopTapped(_:)), for: .touchUpInside)
         btnStop.translatesAutoresizingMaskIntoConstraints = false
-        btnStop.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 50).isActive = true
-        btnStop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
+        btnStop.leftAnchor.constraint(equalTo: timerView.leftAnchor, constant: 50).isActive = true
+        btnStop.bottomAnchor.constraint(equalTo: timerView.bottomAnchor, constant: -150).isActive = true
 
         btnPause = RoundButton()
-        view.addSubview(btnPause)
+        timerView.addSubview(btnPause)
         btnPause.heightAnchor.constraint(equalToConstant: 100).isActive = true
         btnPause.widthAnchor.constraint(equalToConstant: 100).isActive = true
         btnPause.setTitle("일시정지", for: .normal)
@@ -170,11 +186,11 @@ class ViewController: UIViewController {
         btnPause.setTitleColor(UIColor(named: "backgroundColor"), for: .normal)
         btnPause.addTarget(self, action: #selector(btnPauseTapped(_:)), for: .touchUpInside)
         btnPause.translatesAutoresizingMaskIntoConstraints = false
-        btnPause.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -50).isActive = true
-        btnPause.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
+        btnPause.rightAnchor.constraint(equalTo: timerView.rightAnchor, constant: -50).isActive = true
+        btnPause.bottomAnchor.constraint(equalTo: timerView.bottomAnchor, constant: -150).isActive = true
 
         btnResume = RoundButton()
-        view.addSubview(btnResume)
+        timerView.addSubview(btnResume)
         btnResume.heightAnchor.constraint(equalToConstant: 100).isActive = true
         btnResume.widthAnchor.constraint(equalToConstant: 100).isActive = true
         btnResume.setTitle("계속", for: .normal)
@@ -182,36 +198,36 @@ class ViewController: UIViewController {
         btnResume.setTitleColor(UIColor(named: "backgroundColor"), for: .normal)
         btnResume.addTarget(self, action: #selector(btnResumeTapped(_:)), for: .touchUpInside)
         btnResume.translatesAutoresizingMaskIntoConstraints = false
-        btnResume.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -50).isActive = true
-        btnResume.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150).isActive = true
+        btnResume.rightAnchor.constraint(equalTo: timerView.rightAnchor, constant: -50).isActive = true
+        btnResume.bottomAnchor.constraint(equalTo: timerView.bottomAnchor, constant: -150).isActive = true
 
         progressBar.backgroundColor = .clear
         progressBar.radius = view.bounds.width / 2 - 50
         progressBar.progressTintColor = UIColor(named: "systemPink")?.cgColor ?? UIColor.systemBlue.cgColor
         progressBar.trackTintColor = UIColor.lightGray.cgColor
-        view.addSubview(progressBar)
-        progressBar.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        progressBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        progressBar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
-        progressBar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
-//                progressBar.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        progressBar.heightAnchor.constraint(equalTo: progressBar.widthAnchor).isActive = true
+        timerView.addSubview(progressBar)
         progressBar.translatesAutoresizingMaskIntoConstraints = false
+        progressBar.centerXAnchor.constraint(equalTo: timerView.centerXAnchor).isActive = true
+        progressBar.topAnchor.constraint(equalTo: timerView.topAnchor, constant: 100).isActive = true
+        progressBar.leftAnchor.constraint(equalTo: timerView.leftAnchor, constant: 20).isActive = true
+        progressBar.rightAnchor.constraint(equalTo: timerView.rightAnchor, constant: -20).isActive = true
+        progressBar.heightAnchor.constraint(equalTo: progressBar.widthAnchor).isActive = true
+        
         
         lbGuideText = UILabel()
         lbGuideText.text = "계속 집중하세요"
         lbGuideText.textColor = UIColor(named: "fontColor")
         lbGuideText.font = UIFont.systemFont(ofSize: 30)
         lbGuideText.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(lbGuideText)
-        lbGuideText.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        timerView.addSubview(lbGuideText)
+        lbGuideText.centerXAnchor.constraint(equalTo: timerView.centerXAnchor).isActive = true
         
         lbTime = UILabel()
         lbTime.font = UIFont.systemFont(ofSize: 30.0)
         lbTime.textColor = UIColor(named: "fontColor")
         lbTime.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(lbTime)
-        lbTime.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        timerView.addSubview(lbTime)
+        lbTime.centerXAnchor.constraint(equalTo: timerView.centerXAnchor).isActive = true
         
         // 최초 UI 세팅
         setupTimeSelectionUI()
@@ -219,38 +235,28 @@ class ViewController: UIViewController {
     
     func setPvTimeSelection(){
         let hmsValue = getHMSValue(Int(timer.selectedTime))
-        pvTime.selectRow(hmsValue[0], inComponent: 0, animated: false)
-        pvTime.selectRow(hmsValue[1], inComponent: 1, animated: false)
-        pvTime.selectRow(hmsValue[2], inComponent: 2, animated: false)
+        
+        DispatchQueue.main.async {
+            self.pvTime.selectRow(hmsValue[0], inComponent: 0, animated: false)
+            self.pvTime.selectRow(hmsValue[1], inComponent: 1, animated: false)
+            self.pvTime.selectRow(hmsValue[2], inComponent: 2, animated: false)
+        }
+        
     }
     
     func setupTimeSelectionUI(){
-        pvTime.isHidden = false
-        btnStart.isHidden = false
-        
-        lbGuideText.isHidden = true
-        lbTime.isHidden = true
-        progressBar.isHidden = true
-        
-        btnStop.isHidden = true
-        btnResume.isHidden = true
-        btnPause.isHidden = true
+        timeSelectionView.isHidden = false
+        timerView.isHidden = true
     }
     
     func setupTimerUI(){
-        pvTime.isHidden = true
-        btnStart.isHidden = true
-        
-        progressBar.isHidden = false
-        lbGuideText.isHidden = false
-        lbTime.isHidden = false
+        timeSelectionView.isHidden = true
+        timerView.isHidden = false
         lbTime.text = formattedTimeText(timer.remainingTime)
-        
         btnStop.isHidden = false
         btnResume.isHidden = true
         btnPause.isHidden = false
     }
-        
     
     @objc func btnStartTapped(_ sender: UIButton) {
         if timer.selectedTime <= 0 {
@@ -258,26 +264,39 @@ class ViewController: UIViewController {
         }
         
         timer.start()
-        setupTimerUI()
-        progressBar.start(duration: timer.remainingTime)
-
         
-        // TODO: Transition
-//        UIView.transition(with: pvTime, duration: 0.1, options: .transitionCrossDissolve) {
-//            self.pvTime.alpha = 0
-//        } completion: {_ in }
+        
+        DispatchQueue.main.async {
+            self.setupTimerUI()
+            self.progressBar.start(duration: self.timer.remainingTime)
 
+            UIView.transition(with: self.timeSelectionView, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve, animations: {
+                self.timeSelectionView.alpha = 0
+            }, completion: { finished in
+                self.timeSelectionView.isHidden = true
+            })
+            
+            UIView.transition(with: self.timeSelectionView, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve) {
+                self.timerView.alpha = 1
+            } completion: { finished in
+                self.timerView.isHidden = false
+            }
+        }
+        
         scheduleNotification()
     }
     
     @objc func btnPauseTapped(_ sender: UIButton){
         timer.pause()
-        progressBar.pause()
         
-        btnStop.isHidden = false
-        btnPause.isHidden = true
-        btnResume.isHidden = false
-    
+        DispatchQueue.main.async {
+            self.progressBar.pause()
+            
+            self.btnStop.isHidden = false
+            self.btnPause.isHidden = true
+            self.btnResume.isHidden = false
+        }
+        
         removeNotification()
     }
     
@@ -285,18 +304,31 @@ class ViewController: UIViewController {
         timer.resume()
         scheduleNotification()
         
-        progressBar.resume()
-        
-        btnStop.isHidden = false
-        btnPause.isHidden = false
-        btnResume.isHidden = true
+        DispatchQueue.main.async {
+            self.progressBar.resume()
+            self.btnStop.isHidden = false
+            self.btnPause.isHidden = false
+            self.btnResume.isHidden = true
+        }
     }
     
     @objc func btnStopTapped(_ sender: UIButton){
         timer.stop()
-        progressBar.stop()
         
-        setupTimeSelectionUI()
+        DispatchQueue.main.async {
+            self.progressBar.stop()
+            self.setupTimeSelectionUI()
+            UIView.transition(with: self.timeSelectionView, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve) {
+                self.timeSelectionView.alpha = 1
+            } completion: { finished in
+                self.timeSelectionView.isHidden = false
+            }
+            UIView.transition(with: self.timerView, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve) {
+                self.timerView.alpha = 0
+            } completion: { finished in
+                self.timerView.isHidden = true
+            }
+        }
         removeNotification()
     }
     
@@ -306,14 +338,27 @@ class ViewController: UIViewController {
         lbTime.text = formattedTimeText(timer.remainingTime)
 
         if timer.remainingTime <= 0 {
-            let alert = UIAlertController(title: "Alarm", message: "Time's up!", preferredStyle: .actionSheet)
-            let action = UIAlertAction(title: "ok", style: .default) { action in
-                self.setupTimeSelectionUI()
-//                UIView.transition(from: self.lbTime, to: self.pvTime, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve, completion: nil)
-                self.removeNotification()
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Alarm", message: "Time's up!", preferredStyle: .actionSheet)
+                let action = UIAlertAction(title: "ok", style: .default) { action in
+                    self.setupTimeSelectionUI()
+
+                    UIView.transition(with: self.timeSelectionView, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve) {
+                        self.timeSelectionView.alpha = 1
+                    } completion: { finished in
+                        self.timeSelectionView.isHidden = false
+                    }
+                    UIView.transition(with: self.timerView, duration: self.TRANSITION_INTERVAL, options: .transitionCrossDissolve) {
+                        self.timerView.alpha = 0
+                    } completion: { finished in
+                        self.timerView.isHidden = true
+                    }
+                
+                    self.removeNotification()
+                }
+                alert.addAction(action)
+                self.present(alert, animated: true)
             }
-            alert.addAction(action)
-            present(alert, animated: true)
         }
     }
     
@@ -330,6 +375,18 @@ class ViewController: UIViewController {
         return [hour, minute, second]
     }
     
+    @objc func saveDataToUserDefaults(){
+        let strokeStart: CGFloat = progressBar.getPresentationStrokeStart() ?? 0
+        timer.emptyTimer()
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(timer.pausedAt, forKey: UserDefaultKey.PAUSED_AT)
+        userDefaults.set(timer.status.rawValue, forKey: UserDefaultKey.STATUS)
+        userDefaults.set(timer.endTime, forKey: UserDefaultKey.END_TIME)
+        userDefaults.set(timer.selectedTime, forKey: UserDefaultKey.SELECTED_TIME)
+        userDefaults.set(strokeStart, forKey: UserDefaultKey.STROKE_START)
+    }
+    
     func printUserDefaultData(){
         let userDefaults = UserDefaults.standard
         let pausedAt = userDefaults.object(forKey: UserDefaultKey.PAUSED_AT) as? Date
@@ -342,6 +399,7 @@ class ViewController: UIViewController {
         print("stauts: \(status)")
         
     }
+    
     func resetUserDefaultData(){
         let userDefaults = UserDefaults.standard
         userDefaults.set(nil, forKey: UserDefaultKey.PAUSED_AT)
@@ -356,9 +414,7 @@ extension ViewController {
         let content = UNMutableNotificationContent()
         content.title = "Quiet Timer"
         content.body = "Time's up!"
-        
-        // TODO: 개발 중에는 진동해제ㅎㅎ
-//        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "empty_sound.mp3"))
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "empty_sound.mp3"))
 
         for i in 0...30 {
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timer.selectedTime + Double(i), repeats: false)
@@ -390,7 +446,6 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        timer.selectedTime = TimeInterval((row + 1) * 60)
         let hour = pickerView.selectedRow(inComponent: 0)
         let minute = pickerView.selectedRow(inComponent: 1)
         let second = pickerView.selectedRow(inComponent: 2)

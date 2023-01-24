@@ -14,8 +14,8 @@
             filePath = "QuietTimer/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "433"
-            endingLineNumber = "433"
+            startingLineNumber = "488"
+            endingLineNumber = "488"
             landmarkName = "setLabelForComponent(labels:font:)"
             landmarkType = "7">
          </BreakpointContent>
